@@ -20,14 +20,93 @@ class MyApp extends StatelessWidget {
             child: Column(
               children: [
                 HomeScreenNavBar(),
-                ReacentCourseCard(
-                  course: recentCourses[2],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        "Recents",
+                        style: kLargeTitleStyle,
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text(
+                        "23 courses, more coming",
+                        style: kSubtitleStyle,
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RecentCourseList(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class RecentCourseList extends StatefulWidget {
+  @override
+  State<RecentCourseList> createState() => _RecentCourseListState();
+}
+
+class _RecentCourseListState extends State<RecentCourseList> {
+  List<Container> indicators = [];
+  int currentPage = 0;
+
+  Widget updateIndicators() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: recentCourses.map((course) {
+        var index = recentCourses.indexOf(course);
+        return Container(
+          width: 7.0,
+          height: 7.0,
+          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: 
+              currentPage == index ? Color(0xFF0971FE) : Color(0xFFA6AEBD),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 320,
+          width: double.infinity,
+          child: PageView.builder(
+            itemBuilder: (context, index) {
+              return Opacity(
+                opacity: currentPage == index ? 1.0 : 0.5,
+                child: ReacentCourseCard(
+                  course: recentCourses[index],
+                ),
+              );
+            },
+            itemCount: recentCourses.length,
+            controller: PageController(initialPage: 0, viewportFraction: 0.63),
+            onPageChanged: (index) {
+              setState(() {
+                currentPage = index;
+              });
+            },
+          ),
+        ),
+        updateIndicators(),
+      ],
     );
   }
 }
@@ -72,7 +151,7 @@ class SearchFieldWidget extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: kShadowColor,
-                offset: Offset(0,12),
+                offset: Offset(0, 12),
                 blurRadius: 16.0,
               ),
             ],
@@ -90,14 +169,14 @@ class SearchFieldWidget extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: 'Search for courses',
                 hintStyle: kSearchPlaceholderStyle,
-                ),
-                style: kSearchTextStyle,
-                onChanged: (newText){
-                  print(newText);
-                },
               ),
+              style: kSearchTextStyle,
+              onChanged: (newText) {
+                print(newText);
+              },
+            ),
           ),
-          ),
+        ),
       ),
     );
   }
@@ -123,23 +202,23 @@ class SidebarButton extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14.0),
-          boxShadow: [
-            BoxShadow(
-              color: kShadowColor,
-              offset: Offset(0,12),
-              blurRadius: 16.0,
-            ),
-          ]),
-          child: Image.asset(
-            'asset/icons/icon-sidebar.png',
-            color: kPrimaryLabelColor,
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: 12.0,
-            vertical: 14.0,
-          ),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14.0),
+            boxShadow: [
+              BoxShadow(
+                color: kShadowColor,
+                offset: Offset(0, 12),
+                blurRadius: 16.0,
+              ),
+            ]),
+        child: Image.asset(
+          'asset/icons/icon-sidebar.png',
+          color: kPrimaryLabelColor,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 12.0,
+          vertical: 14.0,
+        ),
       ),
     );
   }
