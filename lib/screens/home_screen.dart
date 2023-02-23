@@ -5,6 +5,8 @@ import 'package:designcode_project/constants.dart';
 import 'package:designcode_project/screens/sidebar_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'continue_watching_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -112,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ],
               ),
             ),
+            ContinueWatchingScreen(),
             IgnorePointer(
               ignoring: sidebarHidden,
               child: Stack(
@@ -126,8 +129,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       onTap: () {
                         setState(() {
-                        sidebarHidden = !sidebarHidden;
-                      });
+                          sidebarHidden = !sidebarHidden;
+                        });
                         sidebarAnimationController.reverse();
                       },
                     ),
